@@ -11,14 +11,12 @@ import { formatDate, generateWhatsAppLink } from '@/lib/utils'
 import {
   CheckCircle2,
   XCircle,
-  GraduationCap,
   MessageCircle,
   Phone,
   Sparkles,
 } from 'lucide-react'
 import type { DemoClass } from '@/lib/types'
 import { toast } from 'sonner'
-import Link from 'next/link'
 
 export function DemoDetailManager({ demo }: { demo: DemoClass }) {
   const router = useRouter()
@@ -68,15 +66,15 @@ export function DemoDetailManager({ demo }: { demo: DemoClass }) {
   return (
     <div className="space-y-6">
       {/* Student & Parent Info Strip */}
-      <div className="rounded-xl border border-surface-200 bg-white p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="rounded-2xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-surface-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-surface-400 dark:text-surface-500">
             Student Candidate
           </span>
-          <h2 className="text-lg font-bold text-surface-900">
+          <h2 className="text-lg font-bold text-surface-900 dark:text-white">
             {demo.enquiry?.student_name}
           </h2>
-          <p className="text-xs text-surface-500">
+          <p className="text-xs text-surface-500 dark:text-surface-400">
             Parent: {demo.enquiry?.guardian_name} • {demo.enquiry?.guardian_phone}
           </p>
         </div>
@@ -88,14 +86,14 @@ export function DemoDetailManager({ demo }: { demo: DemoClass }) {
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors"
               >
                 <MessageCircle className="h-4 w-4" />
                 <span>WhatsApp Parent</span>
               </a>
               <a
                 href={`tel:${demo.enquiry.guardian_phone}`}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-surface-200 bg-white px-3 py-2 text-xs font-semibold text-surface-700 hover:bg-surface-50 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-2 text-xs font-semibold text-surface-700 dark:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 <span>Call</span>
@@ -109,14 +107,14 @@ export function DemoDetailManager({ demo }: { demo: DemoClass }) {
       <form onSubmit={handleSaveResult} className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-surface-900">
-              Record Attendance & Faculty Evaluation
+            <CardTitle className="text-base font-bold text-surface-900 dark:text-white">
+              Record Attendance &amp; Faculty Evaluation
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Attendance Toggle */}
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-600 mb-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300 mb-2">
                 Class Attendance
               </label>
               <div className="flex items-center gap-3">
@@ -125,11 +123,11 @@ export function DemoDetailManager({ demo }: { demo: DemoClass }) {
                   onClick={() => setAttendance(true)}
                   className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold border transition-all cursor-pointer ${
                     attendance
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300 ring-2 ring-emerald-500/20'
-                      : 'bg-white text-surface-600 border-surface-200 hover:bg-surface-50'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/80 ring-2 ring-emerald-500/20'
+                      : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-700'
                   }`}
                 >
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                   <span>Student Attended</span>
                 </button>
 
@@ -138,11 +136,11 @@ export function DemoDetailManager({ demo }: { demo: DemoClass }) {
                   onClick={() => setAttendance(false)}
                   className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold border transition-all cursor-pointer ${
                     !attendance
-                      ? 'bg-red-50 text-red-800 border-red-300 ring-2 ring-red-500/20'
-                      : 'bg-white text-surface-600 border-surface-200 hover:bg-surface-50'
+                      ? 'bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800/80 ring-2 ring-red-500/20'
+                      : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-700'
                   }`}
                 >
-                  <XCircle className="h-4 w-4 text-red-600" />
+                  <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   <span>Absent / No Show</span>
                 </button>
               </div>

@@ -27,12 +27,12 @@ const faqs = [
   {
     question: 'How does the WhatsApp integration work?',
     answer:
-      'You connect your WhatsApp Business number to EnrolmentDesk. Incoming enquiry messages are captured automatically, and you can send follow-ups directly from the platform.',
+      'You send pre-formatted, personalised WhatsApp messages with 1-click via official wa.me direct links without paying expensive per-message third-party API costs or middlemen fees.',
   },
   {
-    question: 'Is my data secure?',
+    question: 'Is my student data secure and DPDP compliant?',
     answer:
-      'Yes. All data is encrypted in transit and at rest. We use industry-standard security practices and your data is never shared with third parties.',
+      'Yes. All records are isolated per institute using PostgreSQL Row Level Security (RLS), encrypted in transit and at rest, and adhere to India’s Digital Personal Data Protection Act 2023.',
   },
 ]
 
@@ -40,31 +40,33 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="bg-surface-50 py-24">
+    <section className="bg-surface-50 dark:bg-[#070b14] py-24 transition-colors">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <p className="text-sm font-semibold tracking-wide text-brand-600">FAQ</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-surface-900 md:text-4xl">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">FAQ</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-surface-900 dark:text-white md:text-4xl font-sans">
             Frequently asked questions
           </h2>
         </div>
 
-        <div className="mt-14 divide-y divide-surface-200">
+        <div className="mt-14 divide-y divide-surface-200 dark:divide-surface-800">
           {faqs.map((faq, i) => (
             <div key={i} className="py-5">
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="flex w-full items-center justify-between text-left"
+                className="flex w-full items-center justify-between text-left cursor-pointer group"
               >
-                <span className="text-sm font-medium text-surface-900 pr-4">{faq.question}</span>
+                <span className="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 pr-4 transition-colors">
+                  {faq.question}
+                </span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-surface-400 transition-transform ${
+                  className={`h-4 w-4 shrink-0 text-surface-400 dark:text-surface-500 transition-transform ${
                     openIndex === i ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               {openIndex === i && (
-                <p className="mt-3 text-sm leading-relaxed text-surface-500">{faq.answer}</p>
+                <p className="mt-3 text-sm leading-relaxed text-surface-600 dark:text-surface-400 animate-in fade-in-50 duration-200">{faq.answer}</p>
               )}
             </div>
           ))}

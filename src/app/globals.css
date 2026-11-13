@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-brand-50: #f0f6ff;
-  --color-brand-100: #e0edfe;
-  --color-brand-200: #bae0fd;
-  --color-brand-300: #7cc8fc;
-  --color-brand-400: #38abf8;
-  --color-brand-500: #0e8fe9;
-  --color-brand-600: #0270c7;
-  --color-brand-700: #035aa3;
-  --color-brand-800: #074c86;
-  --color-brand-900: #0c406f;
-  --color-brand-950: #082849;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
 
   --color-surface-0: #ffffff;
   --color-surface-50: #f8fafc;
@@ -24,7 +26,7 @@
   --color-surface-700: #334155;
   --color-surface-800: #1e293b;
   --color-surface-900: #0f172a;
-  --color-surface-950: #020617;
+  --color-surface-950: #070b14;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -32,7 +34,6 @@
 
 @layer base {
   * {
-    @apply border-surface-200;
     box-sizing: border-box;
   }
   
@@ -44,12 +45,12 @@
   }
   
   body {
-    @apply bg-white text-surface-900 font-sans selection:bg-brand-500 selection:text-white;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
-/* Linear-style subtle scrollbar */
+/* Linear/21st.dev subtle scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -64,11 +65,19 @@
   border-radius: 9999px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Glass & Card Elevation Utilities */
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* 21st.dev Glass & Card Elevation Utilities */
 .saas-card {
   background: #ffffff;
   border: 1px solid rgba(226, 232, 240, 0.85);
@@ -76,9 +85,20 @@
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dark .saas-card {
+  background: #0e1424;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
 .saas-card:hover {
   border-color: rgba(203, 213, 225, 1);
   box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -2px rgba(15, 23, 42, 0.03);
+}
+
+.dark .saas-card:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 .saas-card-interactive {
@@ -88,24 +108,89 @@
   transition: all 0.15s ease;
 }
 
+.dark .saas-card-interactive {
+  background: #0e1424;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .saas-card-interactive:hover {
-  border-color: #38abf8;
-  box-shadow: 0 0 0 1px #38abf8, 0 4px 16px -2px rgba(14, 143, 233, 0.08);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px #6366f1, 0 4px 16px -2px rgba(99, 102, 241, 0.12);
   transform: translateY(-1px);
 }
 
+.dark .saas-card-interactive:hover {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 1px #818cf8, 0 4px 20px -2px rgba(99, 102, 241, 0.25);
+  transform: translateY(-1px);
+}
+
+/* 21st.dev Glowing Accents */
 .glow-brand {
-  box-shadow: 0 0 24px -4px rgba(14, 143, 233, 0.25);
+  box-shadow: 0 0 24px -4px rgba(99, 102, 241, 0.35);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.35);
 }
 
-/* Radial Dot Background for Hero */
+.glow-amber {
+  box-shadow: 0 0 24px -4px rgba(245, 158, 11, 0.35);
+}
+
+/* 21st.dev Ambient Grid & Dots Background */
 .bg-grid-pattern {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.3) 1px, transparent 1px);
+}
+
+.dark .bg-dot-pattern {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+/* 21st.dev Glass & Border Shimmer */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(14, 20, 36, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.border-shimmer {
+  position: relative;
+}
+
+.border-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.5), transparent, rgba(56, 189, 248, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }

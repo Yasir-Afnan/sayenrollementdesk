@@ -12,7 +12,7 @@ export default function DashboardLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-surface-50/50">
+    <div className="flex h-screen w-full overflow-hidden bg-surface-50/50 dark:bg-[#070b14] transition-colors">
       {/* Desktop Sidebar */}
       <Sidebar className="hidden lg:flex shrink-0" />
 

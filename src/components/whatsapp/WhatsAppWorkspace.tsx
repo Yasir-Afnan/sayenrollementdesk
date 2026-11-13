@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,9 +14,7 @@ import {
   Send,
   Copy,
   Check,
-  Sparkles,
   ExternalLink,
-  ShieldAlert,
   Plus,
 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -106,15 +104,15 @@ export function WhatsAppWorkspace({
   return (
     <div className="space-y-6">
       {/* Official WhatsApp Compliance Banner */}
-      <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4 text-xs text-emerald-950 flex items-start gap-3">
-        <div className="p-1 rounded-full bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
+      <div className="rounded-2xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/20 p-4 text-xs text-emerald-950 dark:text-emerald-200 flex items-start gap-3">
+        <div className="p-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 shrink-0 mt-0.5">
           <MessageSquare className="h-4 w-4" />
         </div>
         <div className="space-y-1">
-          <p className="font-semibold text-emerald-900">
+          <p className="font-bold text-emerald-900 dark:text-emerald-200">
             Official Click-to-Chat Direct Integration (wa.me)
           </p>
-          <p className="text-emerald-800 leading-relaxed">
+          <p className="text-emerald-800 dark:text-emerald-400 leading-relaxed">
             EnrolmentDesk generates pre-filled, compliant WhatsApp links. Messages open in your
             browser or WhatsApp mobile app directly from your centre&apos;s phone number. No costly
             per-message third party fees.
@@ -126,7 +124,7 @@ export function WhatsAppWorkspace({
         {/* Template Catalog */}
         <div className="lg:col-span-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-surface-900 dark:text-white uppercase tracking-wider">
               Message Templates
             </h2>
             <Button
@@ -142,9 +140,9 @@ export function WhatsAppWorkspace({
 
           {/* New Template Collapsible Form */}
           {isEditingTemplate && (
-            <Card className="border-brand-200 bg-brand-50/20">
+            <Card className="border-brand-200 dark:border-brand-800 bg-brand-50/20 dark:bg-brand-950/20">
               <CardHeader className="pb-3">
-                <CardTitle className="text-xs font-bold text-brand-900">
+                <CardTitle className="text-xs font-bold text-brand-900 dark:text-brand-300">
                   Create Custom Template
                 </CardTitle>
               </CardHeader>
@@ -214,19 +212,19 @@ export function WhatsAppWorkspace({
                     setSelectedTemplateId(tmpl.id)
                     setCustomMessage('')
                   }}
-                  className={`rounded-xl border p-3.5 text-xs transition-all cursor-pointer ${
+                  className={`rounded-2xl border p-3.5 text-xs transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-brand-500 bg-brand-50/30 ring-1 ring-brand-500 shadow-xs'
-                      : 'border-surface-200 bg-white hover:border-surface-300'
+                      ? 'border-brand-500 bg-brand-50/30 dark:bg-brand-950/40 ring-1 ring-brand-500 shadow-xs'
+                      : 'border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] hover:border-surface-300 dark:hover:border-surface-700'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-bold text-surface-900">{tmpl.name}</span>
-                    <span className="rounded bg-surface-100 px-2 py-0.5 text-[10px] font-semibold text-surface-600 uppercase">
+                    <span className="font-bold text-surface-900 dark:text-white">{tmpl.name}</span>
+                    <span className="rounded bg-surface-100 dark:bg-surface-800 px-2 py-0.5 text-[10px] font-semibold text-surface-600 dark:text-surface-300 uppercase">
                       {tmpl.category.replace('_', ' ')}
                     </span>
                   </div>
-                  <p className="text-surface-600 line-clamp-2 leading-relaxed">
+                  <p className="text-surface-600 dark:text-surface-400 line-clamp-2 leading-relaxed">
                     {tmpl.template_text}
                   </p>
                 </div>
@@ -238,10 +236,10 @@ export function WhatsAppWorkspace({
         {/* Live Composer & Preview */}
         <div className="lg:col-span-7 space-y-4">
           <Card>
-            <CardHeader className="border-b border-surface-100 pb-4">
-              <CardTitle className="text-sm font-semibold flex items-center justify-between">
-                <span>WhatsApp Message Preview & Dispatch</span>
-                <span className="text-xs text-surface-500 font-normal">
+            <CardHeader className="border-b border-surface-100 dark:border-surface-800 pb-4">
+              <CardTitle className="text-sm font-bold text-surface-900 dark:text-white flex items-center justify-between">
+                <span>WhatsApp Message Preview &amp; Dispatch</span>
+                <span className="text-xs text-surface-500 dark:text-surface-400 font-normal">
                   Target: +91 {recipientPhone}
                 </span>
               </CardTitle>
@@ -271,28 +269,28 @@ export function WhatsAppWorkspace({
               </div>
 
               {/* Dynamic Variables Pill Bar */}
-              <div className="rounded-lg bg-surface-50 p-2.5 text-[11px] text-surface-500 flex flex-wrap items-center gap-1.5">
-                <span className="font-bold text-surface-700">Auto-filled:</span>
-                <span className="rounded bg-white px-2 py-0.5 border border-surface-200 font-mono text-[10px]">
+              <div className="rounded-xl bg-surface-50 dark:bg-surface-900/60 p-2.5 text-[11px] text-surface-500 dark:text-surface-400 flex flex-wrap items-center gap-1.5 border border-surface-200/60 dark:border-surface-800">
+                <span className="font-bold text-surface-700 dark:text-surface-300">Auto-filled:</span>
+                <span className="rounded bg-white dark:bg-surface-800 px-2 py-0.5 border border-surface-200 dark:border-surface-700 font-mono text-[10px] text-surface-800 dark:text-surface-200">
                   {activeEnquiry?.student_name || '{student_name}'}
                 </span>
-                <span className="rounded bg-white px-2 py-0.5 border border-surface-200 font-mono text-[10px]">
+                <span className="rounded bg-white dark:bg-surface-800 px-2 py-0.5 border border-surface-200 dark:border-surface-700 font-mono text-[10px] text-surface-800 dark:text-surface-200">
                   {activeEnquiry?.guardian_name || '{guardian_name}'}
                 </span>
-                <span className="rounded bg-white px-2 py-0.5 border border-surface-200 font-mono text-[10px]">
+                <span className="rounded bg-white dark:bg-surface-800 px-2 py-0.5 border border-surface-200 dark:border-surface-700 font-mono text-[10px] text-surface-800 dark:text-surface-200">
                   {institution.name}
                 </span>
               </div>
 
               {/* Realistic WhatsApp Chat Bubble Preview */}
-              <div className="rounded-2xl bg-[#efeae2] p-4 border border-[#dad3c8] shadow-inner relative overflow-hidden">
-                <div className="max-w-md ml-auto rounded-xl rounded-tr-xs bg-[#d9fdd3] p-3 text-xs text-surface-900 shadow-xs space-y-2 border border-[#b8f5ae]">
+              <div className="rounded-2xl bg-[#efeae2] dark:bg-[#111827] p-4 border border-[#dad3c8] dark:border-surface-800 shadow-inner relative overflow-hidden transition-colors">
+                <div className="max-w-md ml-auto rounded-2xl rounded-tr-xs bg-[#d9fdd3] dark:bg-[#075e54]/30 p-3.5 text-xs text-surface-900 dark:text-surface-100 shadow-xs space-y-2 border border-[#b8f5ae] dark:border-emerald-800/40">
                   <p className="whitespace-pre-wrap leading-relaxed font-sans">
                     {previewText}
                   </p>
-                  <div className="flex items-center justify-end gap-1 text-[10px] text-surface-500">
+                  <div className="flex items-center justify-end gap-1 text-[10px] text-surface-500 dark:text-surface-400">
                     <span>Just now</span>
-                    <span className="text-brand-600 font-bold">✓✓</span>
+                    <span className="text-brand-600 dark:text-brand-400 font-bold">✓✓</span>
                   </div>
                 </div>
               </div>
@@ -323,7 +321,7 @@ export function WhatsAppWorkspace({
                   href={waLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#20ba59] active:bg-[#1caa52] transition-colors"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#20ba59] active:bg-[#1caa52] transition-colors"
                 >
                   <Send className="h-4 w-4" />
                   <span>Send via WhatsApp</span>

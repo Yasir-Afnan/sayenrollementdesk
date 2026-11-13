@@ -11,13 +11,12 @@ import {
   Plus,
   HelpCircle,
   ExternalLink,
-  Sparkles,
-  Command,
 } from 'lucide-react'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { logout } from '@/lib/actions/auth'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 export function TopBar({
   userName = 'Dr. Anand Rao',
@@ -34,22 +33,22 @@ export function TopBar({
   const [showNotifications, setShowNotifications] = useState(false)
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-surface-200/90 bg-white/95 px-4 md:px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-surface-200/90 dark:border-surface-800/90 bg-white/95 dark:bg-[#070b14]/95 px-4 md:px-6 backdrop-blur-md transition-colors">
       {/* Left: Mobile Toggle & Breadcrumb */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onMobileMenuToggle}
-          className="rounded-lg p-2 text-surface-600 hover:bg-surface-100 lg:hidden cursor-pointer"
+          className="rounded-lg p-2 text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 lg:hidden cursor-pointer"
         >
           {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           <span className="sr-only">Toggle navigation</span>
         </button>
 
-        <div className="hidden sm:flex items-center gap-2 text-xs text-surface-500 font-medium">
-          <span className="font-bold text-surface-900 tracking-tight">{institutionName}</span>
-          <span className="text-surface-300">/</span>
-          <span className="text-surface-600">Admissions Desk</span>
+        <div className="hidden sm:flex items-center gap-2 text-xs text-surface-500 dark:text-surface-400 font-medium">
+          <span className="font-bold text-surface-900 dark:text-white tracking-tight">{institutionName}</span>
+          <span className="text-surface-300 dark:text-surface-700">/</span>
+          <span className="text-surface-600 dark:text-surface-300">Admissions Desk</span>
         </div>
       </div>
 
@@ -58,49 +57,52 @@ export function TopBar({
         {/* Global Search Bar (Linear style) */}
         <Link
           href="/dashboard/enquiries"
-          className="hidden md:flex items-center gap-2 h-9 w-64 rounded-xl border border-surface-200 bg-surface-50/70 px-3 text-xs text-surface-400 hover:border-surface-300 hover:bg-white transition-all cursor-pointer shadow-2xs"
+          className="hidden md:flex items-center gap-2 h-9 w-64 rounded-xl border border-surface-200 dark:border-surface-800 bg-surface-50/70 dark:bg-surface-900/60 px-3 text-xs text-surface-400 dark:text-surface-400 hover:border-surface-300 dark:hover:border-surface-700 hover:bg-white dark:hover:bg-surface-800/80 transition-all cursor-pointer shadow-2xs"
         >
           <Search className="h-3.5 w-3.5 text-surface-400" />
           <span className="truncate">Search students, phone...</span>
-          <kbd className="ml-auto flex items-center gap-0.5 rounded border border-surface-200 bg-white px-1.5 py-0.5 text-[10px] font-mono text-surface-400 shadow-2xs">
+          <kbd className="ml-auto flex items-center gap-0.5 rounded border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-1.5 py-0.5 text-[10px] font-mono text-surface-400 dark:text-surface-400 shadow-2xs">
             ⌘K
           </kbd>
         </Link>
+
+        {/* Theme Switcher */}
+        <ThemeToggle />
 
         {/* Notifications Pill */}
         <div className="relative">
           <button
             type="button"
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative rounded-xl p-2 text-surface-500 hover:bg-surface-100 hover:text-surface-800 transition-colors cursor-pointer"
+            className="relative rounded-xl p-2 text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-surface-800 dark:hover:text-surface-200 transition-colors cursor-pointer"
             title="Follow-up notifications"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#070b14]" />
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-surface-200 bg-white p-3 shadow-xl z-50 text-xs animate-in fade-in zoom-in-95">
-              <div className="flex items-center justify-between border-b border-surface-100 pb-2 mb-2 font-bold text-surface-900">
+            <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] p-3 shadow-xl z-50 text-xs animate-in fade-in zoom-in-95">
+              <div className="flex items-center justify-between border-b border-surface-100 dark:border-surface-800 pb-2 mb-2 font-bold text-surface-900 dark:text-white">
                 <span>Admissions Alerts</span>
-                <span className="rounded bg-red-100 text-red-700 px-1.5 py-0.2 text-[10px]">2 Urgent</span>
+                <span className="rounded bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 px-1.5 py-0.2 text-[10px]">2 Urgent</span>
               </div>
               <div className="space-y-2">
                 <Link
                   href="/dashboard/follow-ups"
                   onClick={() => setShowNotifications(false)}
-                  className="block p-2 rounded-lg bg-red-50/50 hover:bg-red-50 border border-red-200/60"
+                  className="block p-2 rounded-lg bg-red-50/50 dark:bg-red-950/30 hover:bg-red-50 dark:hover:bg-red-950/50 border border-red-200/60 dark:border-red-900/60"
                 >
-                  <p className="font-bold text-red-900">Siddharth Rao — Call Overdue</p>
-                  <p className="text-[11px] text-red-700">JEE Foundation fee structure request</p>
+                  <p className="font-bold text-red-900 dark:text-red-200">Siddharth Rao — Call Overdue</p>
+                  <p className="text-[11px] text-red-700 dark:text-red-400">JEE Foundation fee structure request</p>
                 </Link>
                 <Link
                   href="/dashboard/demos"
                   onClick={() => setShowNotifications(false)}
-                  className="block p-2 rounded-lg bg-surface-50 hover:bg-surface-100 border border-surface-200"
+                  className="block p-2 rounded-lg bg-surface-50 dark:bg-surface-900/50 hover:bg-surface-100 dark:hover:bg-surface-800 border border-surface-200 dark:border-surface-800"
                 >
-                  <p className="font-bold text-surface-900">Tarun Reddy — Demo Saturday</p>
-                  <p className="text-[11px] text-surface-500">Class 12 NEET Biology trial session</p>
+                  <p className="font-bold text-surface-900 dark:text-white">Tarun Reddy — Demo Saturday</p>
+                  <p className="text-[11px] text-surface-500 dark:text-surface-400">Class 12 NEET Biology trial session</p>
                 </Link>
               </div>
             </div>
@@ -126,11 +128,11 @@ export function TopBar({
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-surface-200 bg-white p-2 shadow-2xl z-50 text-xs animate-in fade-in zoom-in-95">
-              <div className="border-b border-surface-100 px-3 py-2.5">
-                <p className="font-bold text-surface-900">{userName}</p>
-                <p className="text-[11px] text-surface-500">Director / Centre Head</p>
-                <p className="text-[10px] text-emerald-600 font-medium mt-0.5 flex items-center gap-1">
+            <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] p-2 shadow-2xl z-50 text-xs animate-in fade-in zoom-in-95">
+              <div className="border-b border-surface-100 dark:border-surface-800 px-3 py-2.5">
+                <p className="font-bold text-surface-900 dark:text-white">{userName}</p>
+                <p className="text-[11px] text-surface-500 dark:text-surface-400">Director / Centre Head</p>
+                <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium mt-0.5 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   <span>Apex Academy Bangalore</span>
                 </p>
@@ -140,7 +142,7 @@ export function TopBar({
                 <Link
                   href="/dashboard/settings"
                   onClick={() => setShowUserMenu(false)}
-                  className="flex items-center gap-2 rounded-xl px-3 py-2 text-surface-700 hover:bg-surface-50 font-medium transition-colors"
+                  className="flex items-center gap-2 rounded-xl px-3 py-2 text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 font-medium transition-colors"
                 >
                   <User className="h-3.5 w-3.5 text-surface-400" />
                   <span>Centre Profile &amp; Courses</span>
@@ -148,7 +150,7 @@ export function TopBar({
                 <Link
                   href="/features"
                   target="_blank"
-                  className="flex items-center justify-between rounded-xl px-3 py-2 text-surface-700 hover:bg-surface-50 font-medium transition-colors"
+                  className="flex items-center justify-between rounded-xl px-3 py-2 text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 font-medium transition-colors"
                 >
                   <span className="flex items-center gap-2">
                     <HelpCircle className="h-3.5 w-3.5 text-surface-400" />
@@ -158,11 +160,11 @@ export function TopBar({
                 </Link>
               </div>
 
-              <div className="border-t border-surface-100 pt-1">
+              <div className="border-t border-surface-100 dark:border-surface-800 pt-1">
                 <form action={logout}>
                   <button
                     type="submit"
-                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-red-600 hover:bg-red-50 font-semibold transition-colors cursor-pointer"
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 font-semibold transition-colors cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5" />
                     <span>Sign Out</span>

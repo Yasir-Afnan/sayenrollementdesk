@@ -21,7 +21,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('[&_tr]:border-b border-surface-200 bg-surface-50/60', className)}
+    className={cn('[&_tr]:border-b border-surface-200 dark:border-surface-800 bg-surface-50/60 dark:bg-surface-900/60', className)}
     {...props}
   />
 ))
@@ -46,7 +46,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      'border-t border-surface-200 bg-surface-50 font-medium [&>tr]:last:border-b-0',
+      'border-t border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-900/80 font-medium [&>tr]:last:border-b-0',
       className
     )}
     {...props}
@@ -61,7 +61,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-surface-200/80 transition-colors hover:bg-surface-50/80 data-[state=selected]:bg-surface-100',
+      'border-b border-surface-200/80 dark:border-surface-800/70 transition-colors hover:bg-surface-50/80 dark:hover:bg-surface-800/40 data-[state=selected]:bg-surface-100 dark:data-[state=selected]:bg-surface-800',
       className
     )}
     {...props}
@@ -76,7 +76,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-11 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wider text-surface-500 [&:has([role=checkbox])]:pr-0',
+      'h-11 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 [&:has([role=checkbox])]:pr-0',
       className
     )}
     {...props}
@@ -90,7 +90,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-4 align-middle text-surface-700 [&:has([role=checkbox])]:pr-0', className)}
+    className={cn('p-4 align-middle text-surface-700 dark:text-surface-200 [&:has([role=checkbox])]:pr-0', className)}
     {...props}
   />
 ))
@@ -102,7 +102,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn('mt-4 text-xs text-surface-400', className)}
+    className={cn('mt-4 text-sm text-surface-500 dark:text-surface-400', className)}
     {...props}
   />
 ))

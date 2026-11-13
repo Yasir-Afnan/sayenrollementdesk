@@ -17,7 +17,6 @@ import {
   AlertTriangle,
   User,
   ArrowRight,
-  Filter,
 } from 'lucide-react'
 import type { FollowUp, StaffMember } from '@/lib/types'
 import { completeFollowUpAction, rescheduleFollowUpAction } from '@/lib/actions/follow-ups'
@@ -98,7 +97,7 @@ export function FollowUpList({
       setCompletingId(null)
       setOutcomeNotes('')
     } catch {
-      toast.error('Failed to complete task')
+      toast.error('Failed to complete follow-up')
     } finally {
       setIsSubmittingComplete(false)
     }
@@ -114,14 +113,18 @@ export function FollowUpList({
       setFollowUps((prev) =>
         prev.map((f) =>
           f.id === reschedulingId
-            ? { ...f, scheduled_date: newDate, scheduled_time: newTime, status: 'pending' }
+            ? {
+                ...f,
+                scheduled_date: newDate,
+                scheduled_time: newTime,
+              }
             : f
         )
       )
-      toast.success('Follow-up rescheduled')
+      toast.success(`Rescheduled to ${formatDate(newDate)}`)
       setReschedulingId(null)
     } catch {
-      toast.error('Failed to reschedule task')
+      toast.error('Failed to reschedule follow-up')
     } finally {
       setIsSubmittingReschedule(false)
     }
@@ -129,21 +132,20 @@ export function FollowUpList({
 
   return (
     <div className="space-y-6">
-      {/* Top Filter & Tab Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Workspace Tabs */}
-        <div className="inline-flex h-11 items-center rounded-xl bg-surface-100 p-1 text-xs font-semibold gap-1">
+      {/* Tab Filter Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="inline-flex rounded-xl bg-surface-100 dark:bg-surface-900 p-1 border border-surface-200/80 dark:border-surface-800 text-xs font-semibold gap-1">
           <button
             type="button"
             onClick={() => setActiveTab('today')}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 transition-all cursor-pointer ${
               activeTab === 'today'
-                ? 'bg-white text-surface-900 shadow-xs'
-                : 'text-surface-600 hover:text-surface-900'
+                ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs'
+                : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200'
             }`}
           >
             <span>Today</span>
-            <span className="rounded-full bg-brand-50 px-1.5 py-0.2 text-[10px] text-brand-700">
+            <span className="rounded-full bg-brand-50 dark:bg-brand-950/60 px-1.5 py-0.2 text-[10px] text-brand-700 dark:text-brand-300">
               {countToday}
             </span>
           </button>
@@ -154,14 +156,14 @@ export function FollowUpList({
             className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 transition-all cursor-pointer ${
               activeTab === 'overdue'
                 ? 'bg-red-600 text-white shadow-xs font-bold'
-                : 'text-red-700 hover:bg-red-50'
+                : 'text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40'
             }`}
           >
             <AlertTriangle className="h-3 w-3" />
             <span>Overdue</span>
             <span
               className={`rounded-full px-1.5 py-0.2 text-[10px] ${
-                activeTab === 'overdue' ? 'bg-red-800 text-white' : 'bg-red-100 text-red-700'
+                activeTab === 'overdue' ? 'bg-red-800 text-white' : 'bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300'
               }`}
             >
               {countOverdue}
@@ -173,12 +175,12 @@ export function FollowUpList({
             onClick={() => setActiveTab('upcoming')}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 transition-all cursor-pointer ${
               activeTab === 'upcoming'
-                ? 'bg-white text-surface-900 shadow-xs'
-                : 'text-surface-600 hover:text-surface-900'
+                ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs'
+                : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200'
             }`}
           >
             <span>Upcoming</span>
-            <span className="rounded-full bg-surface-200 px-1.5 py-0.2 text-[10px] text-surface-700">
+            <span className="rounded-full bg-surface-200 dark:bg-surface-800 px-1.5 py-0.2 text-[10px] text-surface-700 dark:text-surface-300">
               {countUpcoming}
             </span>
           </button>
@@ -188,12 +190,12 @@ export function FollowUpList({
             onClick={() => setActiveTab('completed')}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 transition-all cursor-pointer ${
               activeTab === 'completed'
-                ? 'bg-white text-surface-900 shadow-xs'
-                : 'text-surface-600 hover:text-surface-900'
+                ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs'
+                : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200'
             }`}
           >
             <span>Completed</span>
-            <span className="rounded-full bg-emerald-100 px-1.5 py-0.2 text-[10px] text-emerald-800">
+            <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-1.5 py-0.2 text-[10px] text-emerald-800 dark:text-emerald-300">
               {countCompleted}
             </span>
           </button>
@@ -202,11 +204,11 @@ export function FollowUpList({
         {/* Staff Assignment Filter */}
         {staffMembers.length > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-surface-500 font-medium">Assigned to:</span>
+            <span className="text-xs text-surface-500 dark:text-surface-400 font-medium">Assigned to:</span>
             <select
               value={staffFilter}
               onChange={(e) => setStaffFilter(e.target.value)}
-              className="h-9 rounded-lg border border-surface-200 bg-white px-2.5 text-xs font-medium text-surface-700 focus:outline-none"
+              className="h-9 rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 px-3 text-xs font-medium text-surface-700 dark:text-surface-200 focus:outline-none"
             >
               <option value="all">All Counselors</option>
               {staffMembers.map((s) => (
@@ -222,7 +224,7 @@ export function FollowUpList({
       {/* List of Tasks */}
       {filtered.length === 0 ? (
         <EmptyState
-          icon={<CheckCircle2 className="h-6 w-6 text-emerald-600" />}
+          icon={<CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />}
           title={`No ${activeTab} follow-ups`}
           description={
             activeTab === 'overdue'
@@ -244,10 +246,10 @@ export function FollowUpList({
             return (
               <div
                 key={fup.id}
-                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border p-4 bg-white shadow-xs transition-all ${
+                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border p-4 shadow-xs transition-all ${
                   isOverdue
-                    ? 'border-red-300 bg-red-50/20'
-                    : 'border-surface-200 hover:border-surface-300'
+                    ? 'border-red-300 dark:border-red-900/60 bg-red-50/20 dark:bg-red-950/20'
+                    : 'border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] hover:border-surface-300 dark:hover:border-surface-700'
                 }`}
               >
                 {/* Left: Task Info */}
@@ -259,20 +261,20 @@ export function FollowUpList({
                       </span>
                     )}
 
-                    <span className="text-xs font-bold text-surface-900">
+                    <span className="text-xs font-bold text-surface-900 dark:text-white">
                       {fup.enquiry?.student_name || 'Prospective Student'}
                     </span>
 
-                    <span className="text-[11px] text-surface-500">
+                    <span className="text-[11px] text-surface-500 dark:text-surface-400">
                       (Parent: {fup.enquiry?.guardian_name} • {fup.enquiry?.guardian_phone})
                     </span>
                   </div>
 
-                  <p className="text-xs text-surface-700 leading-relaxed font-medium">
+                  <p className="text-xs text-surface-700 dark:text-surface-300 leading-relaxed font-medium">
                     {fup.notes || 'Routine follow-up call with parent regarding course enrolment.'}
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-surface-400 pt-1">
+                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-surface-400 dark:text-surface-500 pt-1">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {formatDate(fup.scheduled_date)}
@@ -290,7 +292,7 @@ export function FollowUpList({
                       </span>
                     )}
                     {fup.outcome && (
-                      <span className="text-emerald-700 font-semibold">
+                      <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                         Outcome: {fup.outcome}
                       </span>
                     )}
@@ -298,7 +300,7 @@ export function FollowUpList({
                 </div>
 
                 {/* Right: Actions */}
-                <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-surface-100">
+                <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-surface-100 dark:border-surface-800">
                   {fup.status === 'pending' && (
                     <>
                       {/* WhatsApp CTA */}
@@ -307,7 +309,7 @@ export function FollowUpList({
                           href={waLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                          className="inline-flex items-center gap-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
                         >
                           <MessageCircle className="h-3.5 w-3.5" />
                           <span>WhatsApp</span>
@@ -318,7 +320,7 @@ export function FollowUpList({
                       {fup.enquiry?.guardian_phone && (
                         <a
                           href={`tel:${fup.enquiry.guardian_phone}`}
-                          className="inline-flex items-center gap-1 rounded-lg bg-surface-50 px-2.5 py-1.5 text-xs font-semibold text-surface-700 border border-surface-200 hover:bg-surface-100 transition-colors"
+                          className="inline-flex items-center gap-1 rounded-xl bg-surface-50 dark:bg-surface-800 px-2.5 py-1.5 text-xs font-semibold text-surface-700 dark:text-surface-200 border border-surface-200 dark:border-surface-700 hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors"
                         >
                           <Phone className="h-3.5 w-3.5" />
                           <span>Call</span>
@@ -356,7 +358,7 @@ export function FollowUpList({
                   {fup.enquiry_id && (
                     <Link
                       href={`/dashboard/enquiries/${fup.enquiry_id}`}
-                      className="p-1.5 text-surface-400 hover:text-brand-600 rounded-lg transition-colors"
+                      className="p-1.5 text-surface-400 hover:text-brand-600 dark:hover:text-brand-400 rounded-lg transition-colors"
                       title="View Student File"
                     >
                       <ArrowRight className="h-4 w-4" />

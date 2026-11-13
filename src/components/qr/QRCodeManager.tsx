@@ -11,12 +11,6 @@ import {
   Check,
   ExternalLink,
   Printer,
-  Sparkles,
-  Smartphone,
-  CheckCircle2,
-  Building2,
-  Phone,
-  MapPin,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Institution } from '@/lib/types'
@@ -58,23 +52,23 @@ export function QRCodeManager({
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="rounded-2xl border border-brand-200 bg-brand-50/50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="rounded-2xl border border-brand-200 dark:border-brand-900/60 bg-brand-50/50 dark:bg-brand-950/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-brand-600 text-white shadow-xs">
             <QrCode className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-surface-950">
+            <h2 className="text-sm font-bold text-surface-950 dark:text-white">
               Front Desk &amp; Reception QR Standee
             </h2>
-            <p className="text-xs text-surface-600">
+            <p className="text-xs text-surface-600 dark:text-surface-400">
               Place on your front counter, brochure inserts, and noticeboards to capture walk-in parent leads automatically.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5 text-xs bg-white">
+          <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5 text-xs bg-white dark:bg-surface-800">
             <Printer className="h-3.5 w-3.5" />
             <span>Print Counter Standee</span>
           </Button>
@@ -89,12 +83,12 @@ export function QRCodeManager({
         {/* Left: Interactive Printable Standee Preview */}
         <div className="lg:col-span-6 flex flex-col items-center">
           <div className="w-full text-center mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-surface-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-surface-500 dark:text-surface-400">
               Live Counter Standee Preview (A5 / Table Tent)
             </span>
           </div>
 
-          {/* Standee Frame (Printable Target) */}
+          {/* Standee Frame (Printable Target) - White card as physical paper target */}
           <div
             id="printable-standee"
             className="w-full max-w-md rounded-3xl border-2 border-surface-900 bg-white p-8 text-center shadow-2xl relative overflow-hidden flex flex-col items-center justify-between min-h-[500px]"
@@ -150,7 +144,7 @@ export function QRCodeManager({
           {/* Customizer */}
           <Card className="saas-card">
             <CardHeader>
-              <CardTitle className="text-sm font-bold text-surface-950">
+              <CardTitle className="text-sm font-bold text-surface-950 dark:text-white">
                 Customize Standee Headings
               </CardTitle>
               <CardDescription className="text-xs">
@@ -176,7 +170,7 @@ export function QRCodeManager({
           {/* Shareable Link Box */}
           <Card className="saas-card">
             <CardHeader>
-              <CardTitle className="text-sm font-bold text-surface-950">
+              <CardTitle className="text-sm font-bold text-surface-950 dark:text-white">
                 Shareable Digital Link
               </CardTitle>
               <CardDescription className="text-xs">
@@ -185,7 +179,7 @@ export function QRCodeManager({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className="flex-1 overflow-hidden rounded-xl border border-surface-200 bg-surface-50 px-3.5 py-2.5 text-xs font-mono text-surface-700 truncate select-all">
+                <div className="flex-1 overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-900 px-3.5 py-2.5 text-xs font-mono text-surface-700 dark:text-surface-300 truncate select-all">
                   {enquiryUrl}
                 </div>
                 <Button
@@ -196,7 +190,7 @@ export function QRCodeManager({
                 >
                   {copied ? (
                     <>
-                      <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                       <span>Copied</span>
                     </>
                   ) : (
@@ -220,20 +214,20 @@ export function QRCodeManager({
               </div>
 
               {/* 3 Step Explanation */}
-              <div className="rounded-xl border border-surface-200 bg-surface-50/70 p-4 space-y-2.5 text-xs">
-                <p className="font-bold text-surface-900">How Lead Capture Works:</p>
-                <div className="space-y-2 text-surface-600 leading-relaxed">
+              <div className="rounded-2xl border border-surface-200 dark:border-surface-800 bg-surface-50/70 dark:bg-surface-900/40 p-4 space-y-2.5 text-xs">
+                <p className="font-bold text-surface-900 dark:text-white">How Lead Capture Works:</p>
+                <div className="space-y-2 text-surface-600 dark:text-surface-400 leading-relaxed">
                   <div className="flex items-start gap-2">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">1</span>
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-950 text-[10px] font-bold text-brand-700 dark:text-brand-300">1</span>
                     <span>Parent scans the standee QR code with any mobile camera (iPhone / Android).</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">2</span>
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-950 text-[10px] font-bold text-brand-700 dark:text-brand-300">2</span>
                     <span>They enter student name, class, and parent phone with explicit consent.</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">3</span>
-                    <span>Lead immediately lands in your pipeline tagged as <strong className="text-surface-900">Source: QR code</strong> for instant WhatsApp follow-up.</span>
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-950 text-[10px] font-bold text-brand-700 dark:text-brand-300">3</span>
+                    <span>Lead immediately lands in your pipeline tagged as <strong className="text-surface-900 dark:text-white">Source: QR code</strong> for instant WhatsApp follow-up.</span>
                   </div>
                 </div>
               </div>

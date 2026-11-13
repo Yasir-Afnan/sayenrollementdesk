@@ -32,10 +32,6 @@ import {
   Filter,
   LayoutGrid,
   List,
-  Calendar,
-  Clock,
-  ChevronRight,
-  Sparkles,
 } from 'lucide-react'
 import type { Enquiry, Course, EnquiryStatus } from '@/lib/types'
 import { updateEnquiryStatusAction, deleteEnquiryAction } from '@/lib/actions/enquiries'
@@ -106,21 +102,15 @@ export function EnquiryTable({
     }
   }
 
-  // Handle CSV export
+  // Export CSV
   const exportToCSV = () => {
-    if (filtered.length === 0) {
-      toast.error('No enquiries to export')
-      return
-    }
-
     const headers = [
       'Student Name',
       'Guardian Name',
       'Guardian Phone',
-      'Guardian Email',
-      'Academic Level',
       'Course',
-      'Source',
+      'Academic Level',
+      'Lead Source',
       'Status',
       'Enquiry Date',
       'Next Follow-Up',
@@ -128,14 +118,13 @@ export function EnquiryTable({
     ]
 
     const rows = filtered.map((e) => [
-      `"${e.student_name.replace(/"/g, '""')}"`,
-      `"${e.guardian_name.replace(/"/g, '""')}"`,
+      `"${e.student_name}"`,
+      `"${e.guardian_name}"`,
       `"${e.guardian_phone}"`,
-      `"${e.guardian_email || ''}"`,
-      `"${e.academic_level || ''}"`,
       `"${e.course?.name || ''}"`,
+      `"${e.academic_level || ''}"`,
       `"${e.source}"`,
-      `"${ENQUIRY_STATUS_LABELS[e.status] || e.status}"`,
+      `"${ENQUIRY_STATUS_LABELS[e.status]}"`,
       `"${e.enquiry_date}"`,
       `"${e.next_follow_up_date || ''}"`,
       `"${(e.notes || '').replace(/"/g, '""')}"`,
@@ -158,7 +147,7 @@ export function EnquiryTable({
   return (
     <div className="space-y-4">
       {/* Control Bar: Search, Filters, View Toggles, Actions */}
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between rounded-2xl bg-white p-4 border border-surface-200/90 shadow-2xs">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between rounded-2xl bg-white dark:bg-[#0e1424] p-4 border border-surface-200/90 dark:border-surface-800 shadow-2xs transition-colors">
         {/* Search */}
         <div className="flex-1 max-w-sm">
           <SearchInput
@@ -172,14 +161,14 @@ export function EnquiryTable({
         {/* View Mode & Filter Cluster */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Table vs Kanban Toggle */}
-          <div className="inline-flex rounded-xl bg-surface-100 p-1 border border-surface-200/60">
+          <div className="inline-flex rounded-xl bg-surface-100 dark:bg-surface-900 p-1 border border-surface-200/60 dark:border-surface-800">
             <button
               type="button"
               onClick={() => setViewMode('kanban')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'kanban'
-                  ? 'bg-white text-surface-900 shadow-xs'
-                  : 'text-surface-600 hover:text-surface-900'
+                  ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs'
+                  : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200'
               }`}
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -190,8 +179,8 @@ export function EnquiryTable({
               onClick={() => setViewMode('table')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'table'
-                  ? 'bg-white text-surface-900 shadow-xs'
-                  : 'text-surface-600 hover:text-surface-900'
+                  ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs'
+                  : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200'
               }`}
             >
               <List className="h-3.5 w-3.5" />
@@ -203,7 +192,7 @@ export function EnquiryTable({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 px-3 text-xs font-medium text-surface-700 dark:text-surface-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
             <option value="all">All Stages ({enquiries.length})</option>
             {ENQUIRY_STATUSES.map((status) => (
@@ -217,7 +206,7 @@ export function EnquiryTable({
           <select
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 px-3 text-xs font-medium text-surface-700 dark:text-surface-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
             <option value="all">All Courses</option>
             {courses.map((c) => (
@@ -231,7 +220,7 @@ export function EnquiryTable({
           <select
             value={selectedSource}
             onChange={(e) => setSelectedSource(e.target.value)}
-            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 px-3 text-xs font-medium text-surface-700 dark:text-surface-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
             <option value="all">All Sources</option>
             {ENQUIRY_SOURCES.map((source) => (
@@ -279,7 +268,7 @@ export function EnquiryTable({
               const stageEnquiries = filtered.filter((e) => e.status === statusKey)
               const stageColorHeader = {
                 new: 'border-t-blue-500',
-                contacted: 'border-t-yellow-500',
+                contacted: 'border-t-amber-500',
                 interested: 'border-t-purple-500',
                 demo_scheduled: 'border-t-indigo-500',
                 follow_up: 'border-t-orange-500',
@@ -290,14 +279,14 @@ export function EnquiryTable({
               return (
                 <div
                   key={statusKey}
-                  className={`w-72 shrink-0 rounded-2xl bg-surface-100/70 border border-surface-200/90 border-t-4 ${stageColorHeader} p-3 flex flex-col max-h-[calc(100vh-250px)]`}
+                  className={`w-72 shrink-0 rounded-2xl bg-surface-100/70 dark:bg-[#0c1220] border border-surface-200/90 dark:border-surface-800 border-t-4 ${stageColorHeader} p-3 flex flex-col max-h-[calc(100vh-250px)]`}
                 >
                   {/* Column Header */}
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-surface-200/70">
-                    <span className="text-xs font-bold text-surface-900 tracking-tight">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-surface-200/70 dark:border-surface-800">
+                    <span className="text-xs font-bold text-surface-900 dark:text-white tracking-tight">
                       {ENQUIRY_STATUS_LABELS[statusKey]}
                     </span>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-surface-600 border border-surface-200">
+                    <span className="rounded-full bg-white dark:bg-surface-800 px-2 py-0.5 text-[10px] font-bold text-surface-600 dark:text-surface-300 border border-surface-200 dark:border-surface-700">
                       {stageEnquiries.length}
                     </span>
                   </div>
@@ -305,7 +294,7 @@ export function EnquiryTable({
                   {/* Cards in Column */}
                   <div className="space-y-2.5 overflow-y-auto pr-1 flex-1">
                     {stageEnquiries.length === 0 ? (
-                      <div className="rounded-xl border border-dashed border-surface-200 p-4 text-center text-[11px] text-surface-400">
+                      <div className="rounded-xl border border-dashed border-surface-200 dark:border-surface-800 p-4 text-center text-[11px] text-surface-400 dark:text-surface-500">
                         No students in this stage
                       </div>
                     ) : (
@@ -318,39 +307,39 @@ export function EnquiryTable({
                         return (
                           <div
                             key={enq.id}
-                            className="saas-card rounded-xl p-3.5 bg-white space-y-2 relative group"
+                            className="saas-card rounded-xl p-3.5 bg-white dark:bg-[#131b2e] space-y-2 relative group"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <Link
                                 href={`/dashboard/enquiries/${enq.id}`}
-                                className="font-bold text-xs text-surface-900 hover:text-brand-600 transition-colors leading-tight"
+                                className="font-bold text-xs text-surface-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors leading-tight"
                               >
                                 {enq.student_name}
                               </Link>
-                              <span className="shrink-0 text-[10px] font-semibold text-surface-500 bg-surface-100 px-1.5 py-0.2 rounded">
+                              <span className="shrink-0 text-[10px] font-semibold text-surface-500 dark:text-surface-400 bg-surface-100 dark:bg-surface-800 px-1.5 py-0.2 rounded">
                                 {enq.source}
                               </span>
                             </div>
 
-                            <p className="text-[11px] text-surface-500">
+                            <p className="text-[11px] text-surface-500 dark:text-surface-400">
                               Parent: {enq.guardian_name} • {enq.guardian_phone}
                             </p>
 
-                            <div className="text-[11px] font-medium text-brand-700 bg-brand-50/70 px-2 py-1 rounded-md border border-brand-100/60 truncate">
+                            <div className="text-[11px] font-medium text-brand-700 dark:text-brand-300 bg-brand-50/70 dark:bg-brand-950/60 px-2 py-1 rounded-md border border-brand-100/60 dark:border-brand-900/60 truncate">
                               {enq.course?.name || enq.academic_level || 'General Coaching'}
                             </div>
 
                             {/* Move Pipeline Stage Quick Switcher */}
-                            <div className="pt-2 border-t border-surface-100 flex items-center justify-between text-[11px]">
+                            <div className="pt-2 border-t border-surface-100 dark:border-surface-800 flex items-center justify-between text-[11px]">
                               <select
                                 value={enq.status}
                                 onChange={(e) =>
                                   handleStatusChange(enq.id, e.target.value as EnquiryStatus)
                                 }
-                                className="text-[10px] font-semibold text-surface-600 rounded bg-surface-50 border border-surface-200 py-0.5 px-1.5 cursor-pointer focus:outline-none"
+                                className="text-[10px] font-semibold text-surface-600 dark:text-surface-300 rounded bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 py-0.5 px-1.5 cursor-pointer focus:outline-none"
                               >
                                 {ENQUIRY_STATUSES.map((s) => (
-                                  <option key={s} value={s}>
+                                  <option key={s} value={s} className="bg-white dark:bg-surface-900 text-surface-900 dark:text-white">
                                     Move: {ENQUIRY_STATUS_LABELS[s]}
                                   </option>
                                 ))}
@@ -361,14 +350,14 @@ export function EnquiryTable({
                                   href={waLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="p-1 rounded text-emerald-600 hover:bg-emerald-50"
+                                  className="p-1 rounded text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
                                   title="WhatsApp"
                                 >
                                   <MessageCircle className="h-3.5 w-3.5" />
                                 </a>
                                 <Link
                                   href={`/dashboard/enquiries/${enq.id}`}
-                                  className="p-1 rounded text-surface-400 hover:text-brand-600"
+                                  className="p-1 rounded text-surface-400 hover:text-brand-600 dark:hover:text-brand-400"
                                   title="View File"
                                 >
                                   <ExternalLink className="h-3.5 w-3.5" />
@@ -387,7 +376,7 @@ export function EnquiryTable({
         </div>
       ) : (
         /* ================= TABLE VIEW ================= */
-        <div className="rounded-2xl border border-surface-200 bg-white shadow-2xs overflow-hidden">
+        <div className="rounded-2xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-[#0e1424] shadow-2xs overflow-hidden transition-colors">
           <Table>
             <TableHeader>
               <TableRow>
@@ -407,27 +396,27 @@ export function EnquiryTable({
                     <div>
                       <Link
                         href={`/dashboard/enquiries/${enq.id}`}
-                        className="text-xs font-bold text-surface-900 hover:text-brand-600 transition-colors"
+                        className="text-xs font-bold text-surface-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                       >
                         {enq.student_name}
                       </Link>
-                      <p className="text-[11px] text-surface-500">
+                      <p className="text-[11px] text-surface-500 dark:text-surface-400">
                         {enq.guardian_name} • {enq.guardian_phone}
                       </p>
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <p className="text-xs font-medium text-surface-800">
+                    <p className="text-xs font-medium text-surface-800 dark:text-surface-200">
                       {enq.course?.name || 'Unassigned Course'}
                     </p>
-                    <p className="text-[11px] text-surface-500">
+                    <p className="text-[11px] text-surface-500 dark:text-surface-400">
                       {enq.academic_level || 'General Level'}
                     </p>
                   </TableCell>
 
                   <TableCell>
-                    <span className="inline-flex items-center rounded-md bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-surface-700">
+                    <span className="inline-flex items-center rounded-md bg-surface-100 dark:bg-surface-800 px-2 py-0.5 text-[11px] font-medium text-surface-700 dark:text-surface-300">
                       {enq.source}
                     </span>
                   </TableCell>
@@ -438,17 +427,17 @@ export function EnquiryTable({
                       onChange={(e) =>
                         handleStatusChange(enq.id, e.target.value as EnquiryStatus)
                       }
-                      className="text-xs font-semibold rounded-md border border-surface-200 bg-surface-50 py-1 px-2 focus:ring-1 focus:ring-brand-500 focus:outline-none cursor-pointer"
+                      className="text-xs font-semibold rounded-md border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-surface-900 dark:text-white py-1 px-2 focus:ring-1 focus:ring-brand-500 focus:outline-none cursor-pointer"
                     >
                       {ENQUIRY_STATUSES.map((s) => (
-                        <option key={s} value={s}>
+                        <option key={s} value={s} className="bg-white dark:bg-surface-900 text-surface-900 dark:text-white">
                           {ENQUIRY_STATUS_LABELS[s]}
                         </option>
                       ))}
                     </select>
                   </TableCell>
 
-                  <TableCell className="text-xs text-surface-600 whitespace-nowrap">
+                  <TableCell className="text-xs text-surface-600 dark:text-surface-400 whitespace-nowrap">
                     {formatDate(enq.enquiry_date)}
                   </TableCell>
 
@@ -458,8 +447,8 @@ export function EnquiryTable({
                         className={
                           enq.next_follow_up_date <
                           new Date().toISOString().split('T')[0]
-                            ? 'text-red-600 font-bold flex items-center gap-1'
-                            : 'text-surface-700'
+                            ? 'text-red-600 dark:text-red-400 font-bold flex items-center gap-1'
+                            : 'text-surface-700 dark:text-surface-300'
                         }
                       >
                         {enq.next_follow_up_date <
@@ -469,7 +458,7 @@ export function EnquiryTable({
                         {formatDate(enq.next_follow_up_date)}
                       </span>
                     ) : (
-                      <span className="text-surface-400">—</span>
+                      <span className="text-surface-400 dark:text-surface-500">—</span>
                     )}
                   </TableCell>
 
@@ -482,7 +471,7 @@ export function EnquiryTable({
                         )}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-lg p-1.5 text-emerald-600 hover:bg-emerald-50 transition-colors"
+                        className="rounded-lg p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors"
                         title="Chat on WhatsApp"
                       >
                         <MessageCircle className="h-4 w-4" />
@@ -490,7 +479,7 @@ export function EnquiryTable({
 
                       <a
                         href={`tel:${enq.guardian_phone}`}
-                        className="rounded-lg p-1.5 text-surface-600 hover:bg-surface-100 transition-colors"
+                        className="rounded-lg p-1.5 text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
                         title="Call parent"
                       >
                         <Phone className="h-4 w-4" />
@@ -498,7 +487,7 @@ export function EnquiryTable({
 
                       <Link
                         href={`/dashboard/enquiries/${enq.id}`}
-                        className="rounded-lg p-1.5 text-brand-600 hover:bg-brand-50 transition-colors"
+                        className="rounded-lg p-1.5 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/50 transition-colors"
                         title="View details"
                       >
                         <ExternalLink className="h-4 w-4" />
@@ -507,7 +496,7 @@ export function EnquiryTable({
                       <button
                         type="button"
                         onClick={() => setDeleteTargetId(enq.id)}
-                        className="rounded-lg p-1.5 text-surface-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                        className="rounded-lg p-1.5 text-surface-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
                         title="Delete enquiry"
                       >
                         <Trash2 className="h-4 w-4" />

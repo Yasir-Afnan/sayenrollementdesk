@@ -8,8 +8,6 @@ import {
   MessageSquare,
   QrCode,
   BarChart3,
-  ShieldCheck,
-  Zap,
   CheckCircle,
 } from 'lucide-react'
 
@@ -66,14 +64,14 @@ const features = [
 
 export default function Features() {
   return (
-    <section id="features" className="bg-white py-24 border-t border-surface-200">
+    <section id="features" className="bg-white dark:bg-[#070b14] py-24 border-t border-surface-200 dark:border-surface-800/80 transition-colors">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Built for Independent Educators</p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-surface-950 sm:text-4xl font-sans">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">Built for Independent Educators</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-surface-950 dark:text-white sm:text-4xl font-sans">
             Everything your coaching centre needs to run admissions smoothly
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-surface-500">
+          <p className="mt-4 text-base leading-relaxed text-surface-500 dark:text-surface-400">
             Tailored specifically for Indian coaching institutes, multi-teacher centres, and local academies.
           </p>
         </div>
@@ -82,28 +80,28 @@ export default function Features() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="saas-card rounded-2xl p-6 flex flex-col justify-between hover:border-brand-300 transition-all group"
+              className="saas-card rounded-2xl p-6 flex flex-col justify-between hover:border-brand-300 dark:hover:border-brand-500/40 transition-all group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 border border-brand-100 group-hover:scale-105 transition-transform">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-100 dark:border-brand-500/20 group-hover:scale-105 transition-transform">
                     <feature.icon className="h-5 w-5" />
                   </div>
-                  <span className="rounded-full bg-surface-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-surface-600">
+                  <span className="rounded-full bg-surface-100 dark:bg-surface-800 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-surface-600 dark:text-surface-300">
                     {feature.tag}
                   </span>
                 </div>
 
-                <h3 className="text-base font-bold text-surface-900 group-hover:text-brand-600 transition-colors">
+                <h3 className="text-base font-bold text-surface-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                   {feature.title}
                 </h3>
-                <p className="mt-2 text-xs leading-relaxed text-surface-600">
+                <p className="mt-2 text-xs leading-relaxed text-surface-600 dark:text-surface-400">
                   {feature.description}
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-surface-100 text-[11px] font-semibold text-emerald-700 flex items-center gap-1.5">
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+              <div className="mt-6 pt-4 border-t border-surface-100 dark:border-surface-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>{feature.benefit}</span>
               </div>
             </div>
