@@ -13,7 +13,6 @@ import {
 import { StatusBadge } from './StatusBadge'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
-import { Select } from '@/components/ui/select'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { EmptyState } from '@/components/ui/empty-state'
 import {
@@ -31,6 +30,12 @@ import {
   ExternalLink,
   UserPlus,
   Filter,
+  LayoutGrid,
+  List,
+  Calendar,
+  Clock,
+  ChevronRight,
+  Sparkles,
 } from 'lucide-react'
 import type { Enquiry, Course, EnquiryStatus } from '@/lib/types'
 import { updateEnquiryStatusAction, deleteEnquiryAction } from '@/lib/actions/enquiries'
@@ -44,6 +49,7 @@ export function EnquiryTable({
   courses: Course[]
 }) {
   const [enquiries, setEnquiries] = useState<Enquiry[]>(initialEnquiries)
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
   const [search, setSearch] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [selectedCourse, setSelectedCourse] = useState<string>('all')
@@ -78,7 +84,7 @@ export function EnquiryTable({
       setEnquiries((prev) =>
         prev.map((e) => (e.id === enquiryId ? { ...e, status: newStatus } : e))
       )
-      toast.success(`Status updated to ${ENQUIRY_STATUS_LABELS[newStatus]}`)
+      toast.success(`Moved to ${ENQUIRY_STATUS_LABELS[newStatus]}`)
     } catch {
       toast.error('Failed to update status')
     }
@@ -151,25 +157,55 @@ export function EnquiryTable({
 
   return (
     <div className="space-y-4">
-      {/* Filter and Action Bar */}
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between rounded-xl bg-white p-4 border border-surface-200">
+      {/* Control Bar: Search, Filters, View Toggles, Actions */}
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between rounded-2xl bg-white p-4 border border-surface-200/90 shadow-2xs">
+        {/* Search */}
         <div className="flex-1 max-w-sm">
           <SearchInput
-            placeholder="Search by student, parent, or phone..."
+            placeholder="Search student, parent, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onClear={() => setSearch('')}
           />
         </div>
 
+        {/* View Mode & Filter Cluster */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Table vs Kanban Toggle */}
+          <div className="inline-flex rounded-xl bg-surface-100 p-1 border border-surface-200/60">
+            <button
+              type="button"
+              onClick={() => setViewMode('kanban')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'kanban'
+                  ? 'bg-white text-surface-900 shadow-xs'
+                  : 'text-surface-600 hover:text-surface-900'
+              }`}
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              <span>Pipeline Board</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'table'
+                  ? 'bg-white text-surface-900 shadow-xs'
+                  : 'text-surface-600 hover:text-surface-900'
+              }`}
+            >
+              <List className="h-3.5 w-3.5" />
+              <span>Table</span>
+            </button>
+          </div>
+
           {/* Status Filter */}
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="h-10 rounded-lg border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
-            <option value="all">All Statuses ({enquiries.length})</option>
+            <option value="all">All Stages ({enquiries.length})</option>
             {ENQUIRY_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {ENQUIRY_STATUS_LABELS[status]}
@@ -181,7 +217,7 @@ export function EnquiryTable({
           <select
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="h-10 rounded-lg border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
             <option value="all">All Courses</option>
             {courses.map((c) => (
@@ -195,7 +231,7 @@ export function EnquiryTable({
           <select
             value={selectedSource}
             onChange={(e) => setSelectedSource(e.target.value)}
-            className="h-10 rounded-lg border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="h-9 rounded-xl border border-surface-200 bg-white px-3 text-xs font-medium text-surface-700 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           >
             <option value="all">All Sources</option>
             {ENQUIRY_SOURCES.map((source) => (
@@ -205,29 +241,29 @@ export function EnquiryTable({
             ))}
           </select>
 
-          {/* Export to CSV */}
-          <Button variant="outline" size="sm" onClick={exportToCSV} className="gap-1.5 h-10">
-            <Download className="h-4 w-4" />
-            <span className="hidden sm:inline">Export CSV</span>
+          {/* Export CSV */}
+          <Button variant="outline" size="sm" onClick={exportToCSV} className="gap-1.5 h-9 text-xs">
+            <Download className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Export</span>
           </Button>
 
-          {/* New Enquiry Button */}
+          {/* New Enquiry */}
           <Link href="/dashboard/enquiries/new">
-            <Button size="sm" className="gap-1.5 h-10">
-              <UserPlus className="h-4 w-4" />
+            <Button size="sm" className="gap-1.5 h-9 text-xs">
+              <UserPlus className="h-3.5 w-3.5" />
               <span>Add Enquiry</span>
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Main Table */}
+      {/* Main View Display */}
       {filtered.length === 0 ? (
         <EmptyState
           icon={<Filter className="h-6 w-6" />}
-          title="No enquiries matched"
-          description="Try clearing your search query or removing the filters to see all student records."
-          actionLabel="Clear Filters"
+          title="No enquiries matched filters"
+          description="Try resetting search keywords or selecting all pipeline stages."
+          actionLabel="Reset All Filters"
           onAction={() => {
             setSearch('')
             setSelectedStatus('all')
@@ -235,15 +271,130 @@ export function EnquiryTable({
             setSelectedSource('all')
           }}
         />
+      ) : viewMode === 'kanban' ? (
+        /* ================= KANBAN PIPELINE BOARD ================= */
+        <div className="overflow-x-auto pb-4">
+          <div className="inline-flex items-start gap-4 min-w-full">
+            {ENQUIRY_STATUSES.map((statusKey) => {
+              const stageEnquiries = filtered.filter((e) => e.status === statusKey)
+              const stageColorHeader = {
+                new: 'border-t-blue-500',
+                contacted: 'border-t-yellow-500',
+                interested: 'border-t-purple-500',
+                demo_scheduled: 'border-t-indigo-500',
+                follow_up: 'border-t-orange-500',
+                admitted: 'border-t-emerald-500',
+                not_interested: 'border-t-slate-400',
+              }[statusKey]
+
+              return (
+                <div
+                  key={statusKey}
+                  className={`w-72 shrink-0 rounded-2xl bg-surface-100/70 border border-surface-200/90 border-t-4 ${stageColorHeader} p-3 flex flex-col max-h-[calc(100vh-250px)]`}
+                >
+                  {/* Column Header */}
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-surface-200/70">
+                    <span className="text-xs font-bold text-surface-900 tracking-tight">
+                      {ENQUIRY_STATUS_LABELS[statusKey]}
+                    </span>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-surface-600 border border-surface-200">
+                      {stageEnquiries.length}
+                    </span>
+                  </div>
+
+                  {/* Cards in Column */}
+                  <div className="space-y-2.5 overflow-y-auto pr-1 flex-1">
+                    {stageEnquiries.length === 0 ? (
+                      <div className="rounded-xl border border-dashed border-surface-200 p-4 text-center text-[11px] text-surface-400">
+                        No students in this stage
+                      </div>
+                    ) : (
+                      stageEnquiries.map((enq) => {
+                        const waLink = generateWhatsAppLink(
+                          enq.guardian_phone,
+                          `Hello ${enq.guardian_name}, this is from EnrolmentDesk regarding ${enq.student_name}.`
+                        )
+
+                        return (
+                          <div
+                            key={enq.id}
+                            className="saas-card rounded-xl p-3.5 bg-white space-y-2 relative group"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <Link
+                                href={`/dashboard/enquiries/${enq.id}`}
+                                className="font-bold text-xs text-surface-900 hover:text-brand-600 transition-colors leading-tight"
+                              >
+                                {enq.student_name}
+                              </Link>
+                              <span className="shrink-0 text-[10px] font-semibold text-surface-500 bg-surface-100 px-1.5 py-0.2 rounded">
+                                {enq.source}
+                              </span>
+                            </div>
+
+                            <p className="text-[11px] text-surface-500">
+                              Parent: {enq.guardian_name} • {enq.guardian_phone}
+                            </p>
+
+                            <div className="text-[11px] font-medium text-brand-700 bg-brand-50/70 px-2 py-1 rounded-md border border-brand-100/60 truncate">
+                              {enq.course?.name || enq.academic_level || 'General Coaching'}
+                            </div>
+
+                            {/* Move Pipeline Stage Quick Switcher */}
+                            <div className="pt-2 border-t border-surface-100 flex items-center justify-between text-[11px]">
+                              <select
+                                value={enq.status}
+                                onChange={(e) =>
+                                  handleStatusChange(enq.id, e.target.value as EnquiryStatus)
+                                }
+                                className="text-[10px] font-semibold text-surface-600 rounded bg-surface-50 border border-surface-200 py-0.5 px-1.5 cursor-pointer focus:outline-none"
+                              >
+                                {ENQUIRY_STATUSES.map((s) => (
+                                  <option key={s} value={s}>
+                                    Move: {ENQUIRY_STATUS_LABELS[s]}
+                                  </option>
+                                ))}
+                              </select>
+
+                              <div className="flex items-center gap-1">
+                                <a
+                                  href={waLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-1 rounded text-emerald-600 hover:bg-emerald-50"
+                                  title="WhatsApp"
+                                >
+                                  <MessageCircle className="h-3.5 w-3.5" />
+                                </a>
+                                <Link
+                                  href={`/dashboard/enquiries/${enq.id}`}
+                                  className="p-1 rounded text-surface-400 hover:text-brand-600"
+                                  title="View File"
+                                >
+                                  <ExternalLink className="h-3.5 w-3.5" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       ) : (
-        <div className="rounded-xl border border-surface-200 bg-white shadow-xs overflow-hidden">
+        /* ================= TABLE VIEW ================= */
+        <div className="rounded-2xl border border-surface-200 bg-white shadow-2xs overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Student & Parent</TableHead>
-                <TableHead>Course & Level</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Student &amp; Parent</TableHead>
+                <TableHead>Course &amp; Level</TableHead>
+                <TableHead>Lead Source</TableHead>
+                <TableHead>Pipeline Stage</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Next Follow-Up</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -252,7 +403,6 @@ export function EnquiryTable({
             <TableBody>
               {filtered.map((enq) => (
                 <TableRow key={enq.id}>
-                  {/* Student & Parent */}
                   <TableCell>
                     <div>
                       <Link
@@ -267,7 +417,6 @@ export function EnquiryTable({
                     </div>
                   </TableCell>
 
-                  {/* Course & Level */}
                   <TableCell>
                     <p className="text-xs font-medium text-surface-800">
                       {enq.course?.name || 'Unassigned Course'}
@@ -277,14 +426,12 @@ export function EnquiryTable({
                     </p>
                   </TableCell>
 
-                  {/* Source */}
                   <TableCell>
                     <span className="inline-flex items-center rounded-md bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-surface-700">
                       {enq.source}
                     </span>
                   </TableCell>
 
-                  {/* Status Dropdown */}
                   <TableCell>
                     <select
                       value={enq.status}
@@ -301,22 +448,24 @@ export function EnquiryTable({
                     </select>
                   </TableCell>
 
-                  {/* Enquiry Date */}
                   <TableCell className="text-xs text-surface-600 whitespace-nowrap">
                     {formatDate(enq.enquiry_date)}
                   </TableCell>
 
-                  {/* Next Follow-Up */}
                   <TableCell className="text-xs whitespace-nowrap">
                     {enq.next_follow_up_date ? (
                       <span
                         className={
                           enq.next_follow_up_date <
                           new Date().toISOString().split('T')[0]
-                            ? 'text-red-600 font-semibold'
+                            ? 'text-red-600 font-bold flex items-center gap-1'
                             : 'text-surface-700'
                         }
                       >
+                        {enq.next_follow_up_date <
+                          new Date().toISOString().split('T')[0] && (
+                          <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
+                        )}
                         {formatDate(enq.next_follow_up_date)}
                       </span>
                     ) : (
@@ -324,10 +473,8 @@ export function EnquiryTable({
                     )}
                   </TableCell>
 
-                  {/* Action Buttons */}
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      {/* WhatsApp Link */}
                       <a
                         href={generateWhatsAppLink(
                           enq.guardian_phone,
@@ -341,7 +488,6 @@ export function EnquiryTable({
                         <MessageCircle className="h-4 w-4" />
                       </a>
 
-                      {/* Phone Link */}
                       <a
                         href={`tel:${enq.guardian_phone}`}
                         className="rounded-lg p-1.5 text-surface-600 hover:bg-surface-100 transition-colors"
@@ -350,7 +496,6 @@ export function EnquiryTable({
                         <Phone className="h-4 w-4" />
                       </a>
 
-                      {/* Detail Link */}
                       <Link
                         href={`/dashboard/enquiries/${enq.id}`}
                         className="rounded-lg p-1.5 text-brand-600 hover:bg-brand-50 transition-colors"
@@ -359,7 +504,6 @@ export function EnquiryTable({
                         <ExternalLink className="h-4 w-4" />
                       </Link>
 
-                      {/* Delete Button */}
                       <button
                         type="button"
                         onClick={() => setDeleteTargetId(enq.id)}
@@ -382,8 +526,8 @@ export function EnquiryTable({
         open={Boolean(deleteTargetId)}
         onClose={() => setDeleteTargetId(null)}
         onConfirm={handleDeleteConfirm}
-        title="Delete Enquiry Record"
-        description="Are you sure you want to delete this enquiry? This action cannot be undone and will remove all associated follow-ups and demo schedules."
+        title="Delete Student Enquiry Record"
+        description="Are you sure you want to permanently delete this student enquiry? This will remove all associated follow-ups, trial class schedules, and call logs."
         confirmText="Delete Record"
         variant="danger"
         isLoading={isDeleting}

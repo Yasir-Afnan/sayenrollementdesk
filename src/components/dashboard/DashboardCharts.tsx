@@ -20,23 +20,48 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Enquiry } from '@/lib/types'
 
 const SOURCE_COLORS: Record<string, string> = {
-  'Walk-in': '#3b82f6',
-  'QR code': '#8b5cf6',
-  'WhatsApp': '#10b981',
-  'Phone call': '#f59e0b',
-  'Website': '#06b6d4',
-  'Referral': '#ec4899',
-  'Pamphlet': '#64748b',
+  'Walk-in': '#0284c7',
+  'QR code': '#7c3aed',
+  'WhatsApp': '#059669',
+  'Phone call': '#d97706',
+  'Website': '#0891b2',
+  'Referral': '#db2777',
+  'Pamphlet': '#475569',
+  'Social media': '#4f46e5',
+  'Other': '#64748b',
 }
 
 const STATUS_PIE_COLORS: Record<string, string> = {
   new: '#3b82f6',
-  contacted: '#f59e0b',
+  contacted: '#eab308',
   interested: '#a855f7',
   demo_scheduled: '#6366f1',
   follow_up: '#f97316',
   admitted: '#10b981',
   not_interested: '#94a3b8',
+}
+
+// Custom Tooltip component for Recharts
+function CustomTooltip({ active, payload, label }: any) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-xl border border-surface-200 bg-white/95 p-3 shadow-lg backdrop-blur-xs text-xs">
+        <p className="font-bold text-surface-900 mb-1">{label}</p>
+        <div className="space-y-0.5">
+          {payload.map((item: any, idx: number) => (
+            <div key={idx} className="flex items-center justify-between gap-3 text-[11px]">
+              <span className="flex items-center gap-1.5 text-surface-600">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
+                <span>{item.name}:</span>
+              </span>
+              <span className="font-bold text-surface-900">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  return null
 }
 
 export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
@@ -48,9 +73,9 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
 
   if (!isMounted) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="h-80 rounded-xl bg-surface-100 animate-pulse lg:col-span-2" />
-        <div className="h-80 rounded-xl bg-surface-100 animate-pulse" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+        <div className="h-80 rounded-2xl bg-surface-100 animate-pulse lg:col-span-2" />
+        <div className="h-80 rounded-2xl bg-surface-100 animate-pulse" />
       </div>
     )
   }
@@ -80,56 +105,60 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
 
   // 3. Weekly Trajectory Data (Realistic aggregated pipeline trends)
   const trajectoryData = [
-    { week: 'Week 1', enquiries: 4, admitted: 1, demos: 2 },
-    { week: 'Week 2', enquiries: 7, admitted: 2, demos: 4 },
-    { week: 'Week 3', enquiries: 11, admitted: 3, demos: 6 },
-    { week: 'Week 4', enquiries: 16, admitted: 5, demos: 9 },
+    { week: 'Week 1', enquiries: 12, admitted: 3, demos: 5 },
+    { week: 'Week 2', enquiries: 24, admitted: 7, demos: 11 },
+    { week: 'Week 3', enquiries: 48, admitted: 14, demos: 16 },
+    { week: 'Week 4', enquiries: 84, admitted: 22, demos: 18 },
   ]
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
       {/* Enquiry Inflow & Conversion Trend */}
-      <Card className="lg:col-span-2">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-surface-900">
-            Admissions Velocity & Inflow
-          </CardTitle>
-          <CardDescription>
-            Weekly progression of prospective student enquiries, demos, and admissions
-          </CardDescription>
+      <Card className="lg:col-span-2 saas-card">
+        <CardHeader className="pb-2 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-sm font-bold text-surface-950 font-sans tracking-tight">
+              Admissions Velocity &amp; Monthly Trajectory
+            </CardTitle>
+            <CardDescription className="text-xs text-surface-500">
+              Weekly accumulation of student enquiries, trial demo classes, and confirmed admissions
+            </CardDescription>
+          </div>
+          <div className="flex items-center gap-3 text-[11px] font-semibold text-surface-600">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
+              <span>Enquiries</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              <span>Admissions</span>
+            </span>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="h-72 w-full pt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trajectoryData}>
+              <AreaChart data={trajectoryData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorEnquiries" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#0284c7" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#0284c7" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorAdmitted" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="week" stroke="#94a3b8" fontSize={12} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                    border: '1px solid #e2e8f0',
-                    fontSize: '12px',
-                  }}
-                />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="week" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
                   dataKey="enquiries"
                   name="Enquiries"
-                  stroke="#3b82f6"
-                  strokeWidth={2}
+                  stroke="#0284c7"
+                  strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#colorEnquiries)"
                 />
@@ -138,7 +167,7 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
                   dataKey="admitted"
                   name="Admissions"
                   stroke="#10b981"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#colorAdmitted)"
                 />
@@ -149,13 +178,13 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
       </Card>
 
       {/* Pipeline Status Breakdown */}
-      <Card>
+      <Card className="saas-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-surface-900">
+          <CardTitle className="text-sm font-bold text-surface-950 font-sans tracking-tight">
             Pipeline Distribution
           </CardTitle>
-          <CardDescription>
-            Current stage of all recorded student enquiries
+          <CardDescription className="text-xs text-surface-500">
+            Active stage distribution across current student pool
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -165,10 +194,10 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
                 <Pie
                   data={statusData}
                   cx="50%"
-                  cy="50%"
+                  cy="46%"
                   innerRadius={55}
-                  outerRadius={80}
-                  paddingAngle={4}
+                  outerRadius={78}
+                  paddingAngle={3}
                   dataKey="value"
                 >
                   {statusData.map((entry) => (
@@ -178,19 +207,13 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
                     />
                   ))}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '8px',
-                    border: '1px solid #e2e8f0',
-                    fontSize: '12px',
-                  }}
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend
-                  formatter={(val) => <span className="text-xs text-surface-600">{val}</span>}
+                  formatter={(val) => <span className="text-[11px] font-medium text-surface-600">{val}</span>}
                   layout="horizontal"
                   verticalAlign="bottom"
                   align="center"
+                  iconSize={8}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -199,48 +222,41 @@ export function DashboardCharts({ enquiries }: { enquiries: Enquiry[] }) {
       </Card>
 
       {/* Enquiry Acquisition Channels */}
-      <Card className="lg:col-span-3">
+      <Card className="lg:col-span-3 saas-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-surface-900">
+          <CardTitle className="text-sm font-bold text-surface-950 font-sans tracking-tight">
             Enquiry Acquisition Channels
           </CardTitle>
-          <CardDescription>
-            Where prospective students and parents find your tuition centre
+          <CardDescription className="text-xs text-surface-500">
+            Where prospective students and parents discover your tuition centre
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-60 w-full pt-2">
+          <div className="h-56 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sourceData} layout="vertical">
+              <BarChart data={sourceData} layout="vertical" margin={{ left: 10, right: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                <XAxis type="number" stroke="#94a3b8" fontSize={12} tickLine={false} />
+                <XAxis type="number" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis
                   dataKey="name"
                   type="category"
-                  stroke="#64748b"
-                  fontSize={12}
+                  stroke="#475569"
+                  fontSize={11}
                   tickLine={false}
-                  width={100}
+                  axisLine={false}
+                  width={110}
                 />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '8px',
-                    border: '1px solid #e2e8f0',
-                    fontSize: '12px',
-                  }}
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Bar
                   dataKey="enquiries"
                   name="Enquiries"
-                  fill="#3b82f6"
                   radius={[0, 6, 6, 0]}
-                  barSize={18}
+                  barSize={16}
                 >
                   {sourceData.map((entry) => (
                     <Cell
                       key={`source-bar-${entry.name}`}
-                      fill={SOURCE_COLORS[entry.name] || '#3b82f6'}
+                      fill={SOURCE_COLORS[entry.name] || '#0284c7'}
                     />
                   ))}
                 </Bar>

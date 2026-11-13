@@ -1,112 +1,135 @@
+'use client'
+
+import React from 'react'
 import Link from 'next/link'
-import { Check } from 'lucide-react'
+import { Check, Sparkles, ArrowRight } from 'lucide-react'
 
 const plans = [
   {
     name: 'Starter Pilot',
+    tagline: 'Ideal for single-teacher & nascent tuition centres testing digital management.',
     price: '₹1,499',
-    frequency: 'one-time',
-    description: 'Get up and running with the essentials — perfect for a single-location centre trying EnrolmentDesk for the first time.',
+    type: 'one-time investment',
     features: [
-      'Enquiry pipeline setup',
-      'QR-based enquiry capture',
-      'Follow-up reminders',
-      'Up to 100 enquiries',
-      'Email support',
+      'Centralized student enquiry pipeline',
+      'Walk-in & phone lead logging',
+      'Today & overdue follow-up reminders',
+      'Official WhatsApp direct click-to-chat',
+      'Up to 100 prospective student records',
+      'Export student records to CSV',
     ],
     highlighted: false,
+    ctaText: 'Start Pilot Setup',
   },
   {
     name: 'Standard Setup',
+    tagline: 'The complete admissions suite for growing coaching institutes & academies.',
     price: '₹3,999',
-    frequency: 'one-time',
-    description: 'Full onboarding with advanced features for centres that want to hit the ground running.',
+    type: 'one-time setup & onboarding',
     features: [
       'Everything in Starter Pilot',
-      'WhatsApp integration',
-      'Demo class scheduling',
-      'Analytics dashboard',
-      'Unlimited enquiries',
-      'Priority support',
+      'Printable High-Res QR Reception Standee',
+      'Public Mobile Enquiry Form (/enquire/your-centre)',
+      'Trial & Demo class scheduling module',
+      'Student attendance & faculty sentiment logging',
+      '1-Click Demo to Admission conversion',
+      'Full staff counseling team access (up to 5 staff)',
+      'DPDP Act 2023 parental consent tracking',
     ],
     highlighted: true,
+    badge: 'Most Popular for Centres',
+    ctaText: 'Get Standard Installation',
   },
   {
     name: 'Monthly Maintenance',
+    tagline: 'Ongoing cloud hosting, database backups, and software updates.',
     price: '₹799',
-    frequency: '/month',
-    description: 'Ongoing platform access, updates, and support to keep your admissions flowing smoothly.',
+    type: 'per month',
     features: [
-      'Continued platform access',
-      'Feature updates',
-      'Data backups',
-      'WhatsApp & integrations',
-      'Dedicated support',
+      'Unlimited student enquiry records',
+      'Managed cloud database & daily automated backups',
+      'Priority phone & WhatsApp coordinator support',
+      'Quarterly feature updates & performance optimizations',
+      'Staff onboarding and coordinator refresher training',
+      'Cancel anytime without lock-in',
     ],
     highlighted: false,
+    ctaText: 'Add Monthly Care',
   },
 ]
 
 export default function PricingCards() {
   return (
-    <section id="pricing" className="py-24">
+    <section id="pricing" className="bg-surface-50/70 py-24 border-t border-surface-200">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold tracking-wide text-brand-600">Pricing</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-surface-900 md:text-4xl">
-            Simple, transparent pricing
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Transparent &amp; Fair Pricing</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-surface-950 sm:text-4xl font-sans">
+            One-time installation. No expensive monthly traps.
           </h2>
           <p className="mt-4 text-base leading-relaxed text-surface-500">
-            No hidden charges. Start with a one-time setup, add monthly maintenance when you&apos;re
-            ready.
+            Enterprise school ERPs cost lakhs and require weeks of painful training. EnrolmentDesk gives independent tuition centres a modern, working solution at affordable Indian pricing.
           </p>
         </div>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
+        <div className="mt-16 grid gap-8 lg:grid-cols-3 items-stretch">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-xl border p-8 ${
+              className={`rounded-2xl bg-white p-7 flex flex-col justify-between transition-all ${
                 plan.highlighted
-                  ? 'border-brand-600 bg-surface-0 shadow-lg ring-1 ring-brand-600'
-                  : 'border-surface-200 bg-surface-0'
+                  ? 'border-2 border-brand-600 shadow-xl relative scale-100 lg:-translate-y-2 ring-4 ring-brand-500/10'
+                  : 'border border-surface-200 shadow-xs hover:border-surface-300'
               }`}
             >
-              {plan.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-600 px-3 py-0.5 text-xs font-semibold text-white">
-                  Recommended
-                </span>
-              )}
+              <div>
+                {plan.badge && (
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-3 py-1 text-[11px] font-bold text-white mb-3 shadow-xs">
+                    <Sparkles className="h-3 w-3" />
+                    <span>{plan.badge}</span>
+                  </div>
+                )}
 
-              <h3 className="text-lg font-semibold text-surface-900">{plan.name}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-surface-500">{plan.description}</p>
+                <h3 className="text-lg font-bold text-surface-900">{plan.name}</h3>
+                <p className="mt-1.5 text-xs text-surface-500 min-h-[32px] leading-relaxed">
+                  {plan.tagline}
+                </p>
 
-              <div className="mt-6">
-                <span className="text-4xl font-extrabold tracking-tight text-surface-900">
-                  {plan.price}
-                </span>
-                <span className="ml-1 text-sm text-surface-500">{plan.frequency}</span>
+                <div className="mt-5 pb-5 border-b border-surface-100">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-3xl sm:text-4xl font-extrabold text-surface-950 tracking-tight font-sans">
+                      {plan.price}
+                    </span>
+                    <span className="text-xs text-surface-500 font-medium">{plan.type}</span>
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-3">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400">
+                    What&apos;s Included:
+                  </p>
+                  <ul className="space-y-2.5">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2.5 text-xs text-surface-700">
+                        <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
-              <ul className="mt-8 flex flex-col gap-3">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-sm text-surface-600">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto pt-8">
+              <div className="mt-8 pt-4 border-t border-surface-100">
                 <Link
-                  href="/register"
-                  className={`block w-full rounded-lg px-4 py-2.5 text-center text-sm font-semibold transition-colors ${
+                  href="/login"
+                  className={`w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-xs font-bold transition-all ${
                     plan.highlighted
-                      ? 'bg-brand-600 text-white hover:bg-brand-700'
-                      : 'border border-surface-300 bg-surface-0 text-surface-700 hover:bg-surface-50'
+                      ? 'bg-brand-600 text-white shadow-sm hover:bg-brand-700'
+                      : 'bg-surface-100 text-surface-800 hover:bg-surface-200'
                   }`}
                 >
-                  Get Started
+                  <span>{plan.ctaText}</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>

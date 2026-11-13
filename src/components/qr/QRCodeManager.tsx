@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   QrCode,
   Download,
@@ -12,6 +13,10 @@ import {
   Printer,
   Sparkles,
   Smartphone,
+  CheckCircle2,
+  Building2,
+  Phone,
+  MapPin,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Institution } from '@/lib/types'
@@ -26,6 +31,8 @@ export function QRCodeManager({
   enquiryUrl: string
 }) {
   const [copied, setCopied] = useState(false)
+  const [standeeHeadline, setStandeeHeadline] = useState('Admissions Open for Academic Year 2026-27')
+  const [standeeSubhead, setStandeeSubhead] = useState('Scan with your smartphone camera to book a free trial demo class & receive syllabus details')
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(enquiryUrl)
@@ -41,7 +48,7 @@ export function QRCodeManager({
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    toast.success('QR Code image downloaded!')
+    toast.success('High-Resolution QR Code downloaded!')
   }
 
   const handlePrint = () => {
@@ -49,88 +56,143 @@ export function QRCodeManager({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Overview Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: QR Code Display & Download */}
-        <div className="lg:col-span-5 flex flex-col items-center">
-          <Card className="w-full text-center p-6 border-surface-200">
-            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 mb-3">
-              <QrCode className="h-5 w-5" />
+    <div className="space-y-8">
+      {/* Top Banner */}
+      <div className="rounded-2xl border border-brand-200 bg-brand-50/50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-brand-600 text-white shadow-xs">
+            <QrCode className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-surface-950">
+              Front Desk &amp; Reception QR Standee
+            </h2>
+            <p className="text-xs text-surface-600">
+              Place on your front counter, brochure inserts, and noticeboards to capture walk-in parent leads automatically.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5 text-xs bg-white">
+            <Printer className="h-3.5 w-3.5" />
+            <span>Print Counter Standee</span>
+          </Button>
+          <Button size="sm" onClick={handleDownload} className="gap-1.5 text-xs">
+            <Download className="h-3.5 w-3.5" />
+            <span>Download PNG</span>
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left: Interactive Printable Standee Preview */}
+        <div className="lg:col-span-6 flex flex-col items-center">
+          <div className="w-full text-center mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-surface-500">
+              Live Counter Standee Preview (A5 / Table Tent)
+            </span>
+          </div>
+
+          {/* Standee Frame (Printable Target) */}
+          <div
+            id="printable-standee"
+            className="w-full max-w-md rounded-3xl border-2 border-surface-900 bg-white p-8 text-center shadow-2xl relative overflow-hidden flex flex-col items-center justify-between min-h-[500px]"
+          >
+            {/* Top Logo / Badge */}
+            <div className="space-y-1.5">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600 text-white font-extrabold text-xl shadow-md mb-2">
+                {institution.name.charAt(0)}
+              </div>
+              <h3 className="text-lg font-extrabold text-surface-950 tracking-tight font-sans">
+                {institution.name}
+              </h3>
+              <p className="text-[11px] font-bold text-brand-700 tracking-wide uppercase">
+                {standeeHeadline}
+              </p>
             </div>
 
-            <CardTitle className="text-base font-bold text-surface-900">
-              Front Desk & Pamphlet QR
-            </CardTitle>
-            <CardDescription className="text-xs text-surface-500 mt-1">
-              Print this code on admission brochures, standees, or your front reception desk.
-            </CardDescription>
-
-            {/* Rendered QR Code */}
-            <div className="my-6 inline-block rounded-2xl border-4 border-surface-900 bg-white p-4 shadow-md">
+            {/* Framed QR Code with Scanner Target */}
+            <div className="my-6 rounded-2xl border-4 border-surface-950 bg-white p-4 shadow-sm inline-block">
               {qrDataUrl ? (
                 <img
                   src={qrDataUrl}
                   alt={`QR Code for ${institution.name}`}
-                  className="h-56 w-56 object-contain"
+                  className="h-48 w-48 object-contain"
                 />
               ) : (
-                <div className="h-56 w-56 flex items-center justify-center bg-surface-100 text-surface-400">
+                <div className="h-48 w-48 flex items-center justify-center bg-surface-100 text-surface-400">
                   Generating QR...
                 </div>
               )}
               <div className="mt-2 text-center">
-                <span className="text-[10px] font-bold text-surface-900 uppercase tracking-widest">
-                  Scan to Enquire
+                <span className="text-[10px] font-black text-surface-950 uppercase tracking-widest bg-surface-100 px-2 py-0.5 rounded">
+                  SCAN WITH PHONE CAMERA
                 </span>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 w-full">
-              <Button
-                variant="default"
-                size="sm"
-                onClick={handleDownload}
-                className="w-full sm:w-auto gap-1.5 text-xs"
-              >
-                <Download className="h-3.5 w-3.5" />
-                <span>Download High-Res PNG</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePrint}
-                className="w-full sm:w-auto gap-1.5 text-xs"
-              >
-                <Printer className="h-3.5 w-3.5" />
-                <span>Print Standee</span>
-              </Button>
+            {/* Call to Action Subtext */}
+            <div className="space-y-2 max-w-xs">
+              <p className="text-xs text-surface-700 font-medium leading-relaxed">
+                {standeeSubhead}
+              </p>
+              <div className="pt-3 border-t border-surface-200 text-[10px] text-surface-500 flex flex-col items-center gap-0.5 font-medium">
+                <span>📍 {institution.address || 'Jayanagar, Bengaluru'}</span>
+                <span>📞 {institution.phone || '+91 98450 12345'}</span>
+              </div>
             </div>
-          </Card>
+          </div>
         </div>
 
-        {/* Right: Link & Mobile Experience Info */}
-        <div className="lg:col-span-7 space-y-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold text-surface-900">
-                Shareable Admissions Link
+        {/* Right: Standee Customization & Direct URL Links */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* Customizer */}
+          <Card className="saas-card">
+            <CardHeader>
+              <CardTitle className="text-sm font-bold text-surface-950">
+                Customize Standee Headings
               </CardTitle>
-              <CardDescription>
-                Direct web link for WhatsApp status, Google Business Profile, and Instagram bio
+              <CardDescription className="text-xs">
+                Personalize the printed poster before displaying at your front office.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Input
+                label="Poster Header Tagline"
+                value={standeeHeadline}
+                onChange={(e) => setStandeeHeadline(e.target.value)}
+                placeholder="e.g. Admissions Open for 2026-27"
+              />
+              <Input
+                label="Instruction Text"
+                value={standeeSubhead}
+                onChange={(e) => setStandeeSubhead(e.target.value)}
+                placeholder="e.g. Scan with your camera to book a trial demo class"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Shareable Link Box */}
+          <Card className="saas-card">
+            <CardHeader>
+              <CardTitle className="text-sm font-bold text-surface-950">
+                Shareable Digital Link
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Direct link for WhatsApp messages, Instagram bio, and Google Maps listing.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className="flex-1 overflow-hidden rounded-lg border border-surface-200 bg-surface-50 px-3 py-2 text-xs font-mono text-surface-700 truncate">
+                <div className="flex-1 overflow-hidden rounded-xl border border-surface-200 bg-surface-50 px-3.5 py-2.5 text-xs font-mono text-surface-700 truncate select-all">
                   {enquiryUrl}
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleCopyUrl}
-                  className="shrink-0 gap-1 text-xs"
+                  className="shrink-0 gap-1 text-xs h-10"
                 >
                   {copied ? (
                     <>
@@ -140,7 +202,7 @@ export function QRCodeManager({
                   ) : (
                     <>
                       <Copy className="h-3.5 w-3.5" />
-                      <span>Copy</span>
+                      <span>Copy Link</span>
                     </>
                   )}
                 </Button>
@@ -150,39 +212,30 @@ export function QRCodeManager({
                   rel="noopener noreferrer"
                   className="shrink-0"
                 >
-                  <Button size="sm" variant="outline" className="gap-1 text-xs">
+                  <Button size="sm" variant="outline" className="gap-1 text-xs h-10">
                     <span>Preview</span>
                     <ExternalLink className="h-3 w-3" />
                   </Button>
                 </a>
               </div>
 
-              <div className="rounded-xl border border-surface-200 bg-surface-50/70 p-4 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-bold text-surface-900">
-                  <Smartphone className="h-4 w-4 text-brand-600" />
-                  <span>How QR Enquiry Capture Works for Your Centre</span>
+              {/* 3 Step Explanation */}
+              <div className="rounded-xl border border-surface-200 bg-surface-50/70 p-4 space-y-2.5 text-xs">
+                <p className="font-bold text-surface-900">How Lead Capture Works:</p>
+                <div className="space-y-2 text-surface-600 leading-relaxed">
+                  <div className="flex items-start gap-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">1</span>
+                    <span>Parent scans the standee QR code with any mobile camera (iPhone / Android).</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">2</span>
+                    <span>They enter student name, class, and parent phone with explicit consent.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">3</span>
+                    <span>Lead immediately lands in your pipeline tagged as <strong className="text-surface-900">Source: QR code</strong> for instant WhatsApp follow-up.</span>
+                  </div>
                 </div>
-                <ol className="list-decimal list-inside text-xs text-surface-600 space-y-2 leading-relaxed">
-                  <li>
-                    A parent visits your centre or sees your brochure and scans the QR code with their mobile phone camera.
-                  </li>
-                  <li>
-                    They are instantly taken to your dedicated mobile-friendly enquiry form without installing any app.
-                  </li>
-                  <li>
-                    They enter their child&apos;s name, class, course interest, and phone number, with explicit contact consent.
-                  </li>
-                  <li>
-                    The enquiry immediately appears in your EnrolmentDesk pipeline tagged as{' '}
-                    <span className="font-semibold text-brand-700 bg-brand-50 px-1 py-0.5 rounded">
-                      Source: QR code
-                    </span>
-                    .
-                  </li>
-                  <li>
-                    You receive an immediate notification to initiate the first WhatsApp greeting or phone call.
-                  </li>
-                </ol>
               </div>
             </CardContent>
           </Card>
